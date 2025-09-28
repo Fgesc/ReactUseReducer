@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef, useState, type ChangeEvent } from "react";
+import { useEffect, useReducer, useState, type ChangeEvent } from "react";
 import { type User } from "./types";
 import "./App.css";
 
@@ -37,25 +37,19 @@ function userReducer(state: State, action: Action): State {
 
 const App = () => {
     const [searchQuery, setSearchQuery] = useState("");
-    const hasSearchedRef = useRef(false);
     const [state, dispatch] = useReducer(userReducer, { status: "initial" });
 
     useEffect(() => {
         const trimQuery = searchQuery.trim();
         if (trimQuery === "") {
-            if (hasSearchedRef.current) {
-                dispatch({ type: "user_not_found" });
-            } else {
-                dispatch({ type: "reset_to_initial" });
-            }
+            dispatch({ type: "reset_to_initial" });
             return;
         }
 
         const controller = new AbortController();
 
         const fetchFunc = async () => {
-            dispatch({ type: "search_started" });
-            hasSearchedRef.current = true;     
+            dispatch({ type: "search_started" });   
 
             try {
                 const response = await fetch(
